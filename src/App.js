@@ -1,8 +1,14 @@
 import React from 'react'
-// import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './BooksAPI'
 import './App.css'
+import Bookshelf from './Bookshelf';
+import Search from './Search';
+import BookDetail from './BookDetail';
+
+// const allBooks = BooksAPI.getAll();
 
 class BooksApp extends React.Component {
+
   state = {
     /**
      * TODO: Instead of using this state variable to keep track of which page
@@ -10,16 +16,35 @@ class BooksApp extends React.Component {
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
+    firstBook: BooksAPI.get('1'),
+    listLoaded: false,
+    fullBookList: '',
     showSearchPage: false
+  }
+  componentDidMount() {
+
+      BooksAPI.getAll().then(result => this.setState({ fullBookList: result, listLoaded: true }))
+      // this.setState({ toggle: !this.state.toggle })
+
+  }
+
+  updateBooksOnShelf = () => {
+    const allBooks = BooksAPI.getAll();
+    this.setState ({
+      fullBookList: allBooks
+    })
   }
 
   render() {
+
+
+    console.log(this.state.fullBookList);
     return (
       <div className="app">
         {this.state.showSearchPage ? (
           <div className="search-books">
             <div className="search-books-bar">
-              <button className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</button>
+              <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
               <div className="search-books-input-wrapper">
                 {/*
                   NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -42,6 +67,7 @@ class BooksApp extends React.Component {
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
+            {this.state.listLoaded ? (<Bookshelf booksInBookshelf={this.state.fullBookList} />) : (
             <div className="list-books-content">
               <div>
                 <div className="bookshelf">
@@ -192,9 +218,9 @@ class BooksApp extends React.Component {
                   </div>
                 </div>
               </div>
-            </div>
+            </div>)}
             <div className="open-search">
-              <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
+              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
             </div>
           </div>
         )}
@@ -203,4 +229,4 @@ class BooksApp extends React.Component {
   }
 }
 
-export default BooksApp
+export default BooksApp;
