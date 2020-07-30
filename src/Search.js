@@ -6,17 +6,23 @@ import * as BooksAPI from './BooksAPI';
 class Search extends React.Component {
   constructor(props){
     super(props);
-    const filteredbooks = BooksAPI.search(this.state.searchText, 20);
     this.state = {
-      searchText: ''
-
+      searchText: '',
+      filteredBooks: '',
     }
   }
+  componentDidMount() {
 
+      BooksAPI.search(this.state.searchText, 20).then(result => this.setState({ filteredBooks: result, listLoaded: true }))
+      // this.setState({ toggle: !this.state.toggle })
+
+  }
   handleSearchTextChange = (value) => {
+    BooksAPI.search(value, 20).then(result => this.setState({ filteredBooks: result, listLoaded: true }));
     this.setState ({
       searchText: value
     })
+    console.log(JSON.stringify(this.state))
   };
 
   filterBookList = () => {
@@ -25,9 +31,9 @@ class Search extends React.Component {
 
   render(){
     return (
-      <div className="search">bookshelf
+      <div className="search">
         <SearchBar searchText={this.state.searchText} onSearchTextChange={this.handleSearchTextChange} />
-        <FilteredBookList filteredBookList={this.filteredBooks}/>
+        <FilteredBookList filteredBookList={this.state.filteredBooks}/>
       </div>
     )
   }

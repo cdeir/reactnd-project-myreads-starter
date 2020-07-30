@@ -7,14 +7,13 @@ class Shelf extends React.Component {
  constructor(props){
    super(props);
    const books = this.props.booksInBookshelf.map((book, key) => book.shelf === this.props.formalTitle ? (
-     <Book key={book.id} id={book.id} books={this.props.booksInBookshelf} />
+     <Book key={book.id} id={book.id} books={this.props.booksInBookshelf} onUpdateBook={this.props.onUpdateBook} />
    ) : (<div key={book.id} className="empty"></div>));
    this.state = {
      books: books
    }
    // console.log(JSON.stringify(theBooks));
  }
-
     render(){
    return (
      <div className="bookshelf">

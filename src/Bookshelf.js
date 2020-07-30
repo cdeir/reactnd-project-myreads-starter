@@ -9,7 +9,7 @@ class Bookshelf extends React.Component {
  render(){
    return (
      <div className="bookshelf">
-       <Shelf title='Currently Reading' formalTitle='currentlyReading' booksInBookshelf={this.props.booksInBookshelf} />
+       <Shelf title='Currently Reading' formalTitle='currentlyReading' booksInBookshelf={this.props.booksInBookshelf} onUpdateBook={this.props.onUpdateBook} />
        <Shelf title='Want to Read' formalTitle='wantToRead' booksInBookshelf={this.props.booksInBookshelf} />
        <Shelf title='Read' formalTitle='read' booksInBookshelf={this.props.booksInBookshelf} />
      </div>
