@@ -8,21 +8,20 @@ class Search extends React.Component {
     super(props);
     this.state = {
       searchText: '',
-      filteredBooks: '',
+      filteredBooks: [],
     }
   }
-  componentDidMount() {
 
-      BooksAPI.search(this.state.searchText, 20).then(result => this.setState({ filteredBooks: result, listLoaded: true }))
-      // this.setState({ toggle: !this.state.toggle })
-
-  }
-  handleSearchTextChange = (value) => {
-    BooksAPI.search(value, 20).then(result => this.setState({ filteredBooks: result, listLoaded: true }));
+  handleSearchTextChange = (e) => {
+    console.log(e.target.value);
+    e.target.value !== '' ? BooksAPI.search(`${e.target.value}`, 20).then(result => (
+      console.log(result + " result"),
+      this.setState({ filteredBooks: result}))) :
+      this.setState({ filteredBooks: []});
     this.setState ({
-      searchText: value
+      searchText: e.target.value
     })
-    console.log(JSON.stringify(this.state))
+    console.log(JSON.stringify(this.state));
   };
 
   filterBookList = () => {
@@ -31,10 +30,12 @@ class Search extends React.Component {
 
   render(){
     return (
-      <div className="search">
-        <SearchBar searchText={this.state.searchText} onSearchTextChange={this.handleSearchTextChange} />
-        <FilteredBookList filteredBookList={this.state.filteredBooks}/>
-      </div>
+        <div className="search-books">
+          <SearchBar searchText={this.state.searchText} onSearchTextChange={this.handleSearchTextChange} />
+
+          <FilteredBookList filteredBooks={this.state.filteredBooks} booksOnShelf={this.props.booksInBookshelf}/>
+        </div>
+
     )
   }
 
